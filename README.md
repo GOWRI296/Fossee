@@ -1,2 +1,8 @@
-# Fossee
-I implemented and validated the tensile design logic for bolted tension members as per IS 800:2007, including gross section yielding, net section rupture, and block shear failure. I developed unit and integration tests using PyTest to ensure correct identification of the governing failure mode and robust handling of edge cases and invalid inputs.
+# pytest cache directory #
+
+This directory contains data from the pytest's cache plugin,
+which provides the `--lf` and `--ff` options, as well as the `cache` fixture.
+
+**Do not** commit this to version control.
+
+See [the docs](https://docs.pytest.org/en/stable/how-to/cache.html) for more information.
