@@ -1,284 +1,88 @@
-🧱 Osdag – Tension Member (Bolted) Design
-Block Shear & Governing Capacity | PyTest-Based Validation
-📌 Project Overview
+🧱 Osdag – Tension Member (Bolted) Module
+Block Shear & Governing Capacity Validation using PyTest
+📌 Overview
 
-This project implements and validates the design strength calculations for bolted steel tension members as per IS 800:2007.
-The focus is on software development and testing, aligning with the Osdag (Open Steel Design and Graphics) philosophy.
+This project focuses on software development and testing for the bolted tension member design module inspired by Osdag (Open Steel Design and Graphics).
 
-The work covers:
+The objective is to:
 
-Individual failure modes of tension members
+Implement key failure mode checks for tension members
 
-Governing design strength logic
+Ensure IS 800:2007 compliance
 
-Robust unit and integration testing using PyTest
+Validate correctness using unit and integration tests
 
-This repository is structured to closely resemble real Osdag module paths, making it suitable for extension or direct integration.
+Demonstrate engineering-grade test design, not just basic scripting
 
-📐 Engineering Scope (IS 800:2007)
+This work is suitable for FOSSEE / Osdag internship evaluation under the Software Development area of interest.
 
-The following design checks are implemented and tested:
+🏗️ Engineering Checks Covered (IS 800:2007)
 
-1️⃣ Gross Section Yielding (Clause 6.2)
-𝑇
-𝑑
-𝑔
-=
-𝐴
-𝑔
-𝑓
-𝑦
-𝛾
-𝑚
-0
-T
-dg
-	​
+The following limit states for bolted tension members are implemented and tested:
 
-=
-γ
-m0
-	​
+1️⃣ Gross Section Yielding
 
-A
-g
-	​
+Ensures yielding does not occur across the full cross-section
 
-f
-y
-	​
+Based on material yield strength
 
-	​
+Clause reference: IS 800 – Clause 6.2
 
+2️⃣ Net Section Rupture
 
-Ensures yielding does not occur in the gross section
+Accounts for reduction due to bolt holes and shear lag
 
-Partial safety factor: γₘ₀ = 1.1
+Includes the mandatory 0.9 reduction factor
 
-2️⃣ Net Section Rupture (Clause 6.3.1)
-𝑇
-𝑑
-𝑛
-=
-0.9
-𝐴
-𝑛
-𝑓
-𝑢
-𝛾
-𝑚
-1
-T
-dn
-	​
+Clause reference: IS 800 – Clause 6.3.1
 
-=
-γ
-m1
-	​
+3️⃣ Block Shear Failure
 
-0.9A
-n
-	​
+Evaluates combined shear and tension failure paths
 
-f
-u
-	​
+Both possible block shear paths are checked
 
-	​
+Governing (minimum) value is selected
 
+Clause reference: IS 800 – Clause 6.4
 
-Accounts for bolt holes and shear lag
+4️⃣ Governing Tension Capacity
 
-Reduction factor 0.9 as per IS 800
+The final design strength is taken as the minimum of:
 
-Partial safety factor: γₘ₁ = 1.25
+Gross yielding
 
-3️⃣ Block Shear Strength (Clause 6.4)
+Net rupture
 
-Two possible block shear failure paths are evaluated, and the minimum governs:
+Block shear
 
-𝑇
-𝑑
-𝑏
-1
-=
-𝐴
-𝑣
-𝑔
-𝑓
-𝑦
-𝛾
-𝑚
-0
-+
-0.9
-𝐴
-𝑡
-𝑛
-𝑓
-𝑢
-𝛾
-𝑚
-1
-T
-db1
-	​
+This mirrors real-world steel design practice used in Osdag
 
-=
-γ
-m0
-	​
+🧪 Testing Strategy
 
-A
-vg
-	​
-
-f
-y
-	​
-
-	​
-
-+
-γ
-m1
-	​
-
-0.9A
-tn
-	​
-
-f
-u
-	​
-
-	​
-
-𝑇
-𝑑
-𝑏
-2
-=
-0.9
-𝐴
-𝑣
-𝑔
-𝑓
-𝑢
-𝛾
-𝑚
-1
-+
-𝐴
-𝑡
-𝑛
-𝑓
-𝑦
-𝛾
-𝑚
-0
-T
-db2
-	​
-
-=
-γ
-m1
-	​
-
-0.9A
-vg
-	​
-
-f
-u
-	​
-
-	​
-
-+
-γ
-m0
-	​
-
-A
-tn
-	​
-
-f
-y
-	​
-
-	​
-
-4️⃣ Overall Tension Capacity
-
-The governing design strength is taken as:
-
-𝑇
-𝑑
-=
-min
-⁡
-(
-𝑇
-𝑑
-𝑔
-,
-𝑇
-𝑑
-𝑛
-,
-𝑇
-𝑑
-𝑏
-)
-T
-d
-	​
-
-=min(T
-dg
-	​
-
-,T
-dn
-	​
-
-,T
-db
-	​
-
-)
-
-This ensures a safe and code-compliant design.
-
-🧪 Testing Strategy (PyTest)
-
-The project uses PyTest to validate both individual checks and overall behavior.
+Testing is implemented using PyTest with a clear separation between unit tests and integration tests.
 
 ✔ Unit Tests
 
-Gross section yielding
+Gross section yielding calculation
 
-Net section rupture
+Net section rupture calculation
 
-Block shear strength
+Block shear strength evaluation
 
-Invalid input handling (negative areas, invalid values)
+Input validation (negative areas, invalid values)
 
 ✔ Integration Test
 
-Ensures the minimum (governing) capacity is correctly identified
+Confirms that the correct governing failure mode is selected for a given member
 
-✔ Edge Cases
+✔ Edge Case Handling
 
-Very small areas
+Very small sectional areas
 
 Invalid geometrical inputs
 
-Block shear governing over yielding/rupture
+Scenarios where block shear governs over yielding or rupture
 
 📁 Project Structure
 osdag_pytest_project/
@@ -296,52 +100,62 @@ osdag_pytest_project/
 ├── venv/
 └── README.md
 
+
+This structure mirrors actual Osdag module paths, making the work easy to integrate or extend.
+
 ▶️ How to Run
 1️⃣ Activate virtual environment
 venv\Scripts\activate
 
-2️⃣ Run only tension member tests
+2️⃣ Run tension member tests
 python -m pytest tests\tension\test_tension_bolted.py -v
 
 3️⃣ Run full test suite
 python -m pytest -v
 
-✅ Sample Output
+✅ Expected Output
 collected 8 items
-8 passed in 0.04s
+8 passed in ~0.04s
 
-🎯 Why This Work Is Relevant to Osdag / FOSSEE
 
-Closely follows IS 800:2007 clauses
+This confirms:
 
-Modular design compatible with Osdag’s architecture
+Correct implementation
 
-Strong emphasis on test-driven validation
+Stable test discovery
 
-Demonstrates ability to convert structural design theory → reliable software
+No silent failures
 
-Easy to extend to:
+🎯 Relevance to FOSSEE / Osdag
 
-Welded tension members
+This project demonstrates:
 
-Compression members
+Translation of structural design clauses into software logic
 
-Connection design modules
+Use of test-driven validation for engineering software
+
+Proper handling of governing limit states
+
+Clean, modular, and extensible code structure
+
+Readiness for extension into other Osdag modules
+
+This aligns directly with Osdag’s goal of reliable, open-source structural design software.
 
 🚀 Possible Extensions
 
-Add compression member buckling curves (IS 800 Cl. 7)
+Welded tension member module
 
-Add welded tension member checks
+Compression member buckling checks
 
-Add coverage reporting using pytest-cov
+Beam flexure and shear interaction
 
-Integrate with Osdag section property database
+Coverage reporting using pytest-cov
 
-Automate design optimization loops
+Integration with Osdag section property databases
 
 👤 Author
 
 Gurujukota Gowri Nandhan
-B.Tech – Computer Science (AI & ML)
+B.Tech – Computer Science & Engineering (AI & ML)
 Interest Area: Engineering Software Development & Testing
